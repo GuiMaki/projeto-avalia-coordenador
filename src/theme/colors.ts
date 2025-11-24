@@ -1,7 +1,7 @@
 import tailwindColors from 'tailwindcss/colors';
 
 const colors = {
-  primary: '#1654A2',
+  primary: '#24366E',
   alert: {
     success: '#2DAC3E',
     error: '#DE3737',
