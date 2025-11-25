@@ -11,5 +11,6 @@ export { default as EyeOffIcon } from './EyeOff.svg';
 export { default as FilterIcon } from './Filter.svg';
 export { default as HomeIcon } from './Home.svg';
 export { default as MagnifyingIcon } from './Magnifying.svg';
+export { default as ResetPasswordIcon } from './ResetPassword.svg';
 export { default as TeachersIcon } from './Teachers.svg';
 export { default as XIcon } from './X.svg';
