@@ -89,7 +89,9 @@ const Input = <TFieldValues extends FieldValues>({
               onClick={() => setPasswordHidden(!passwordHidden)}
             >
               <Icon
-                color={passwordHidden ? colors.neutral[400] : colors.primary}
+                color={
+                  passwordHidden ? colors.neutral[40] : colors.primary[100]
+                }
                 name={passwordHidden ? 'EyeOffIcon' : 'EyeIcon'}
               />
             </button>

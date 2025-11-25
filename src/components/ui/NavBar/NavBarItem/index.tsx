@@ -23,7 +23,7 @@ const NavBarIcon = ({
       onClick={onPress}
     >
       <Icon
-        color={selected ? colors.primary : colors.neutral[600]}
+        color={selected ? colors.primary[100] : colors.neutral[60]}
         fill={fill}
         name={icon}
         size={24}
@@ -31,7 +31,7 @@ const NavBarIcon = ({
 
       <span
         className="text-neutral-70 text-sm"
-        style={{ color: selected ? colors.primary : colors.neutral[600] }}
+        style={{ color: selected ? colors.primary[100] : colors.neutral[60] }}
       >
         {label}
       </span>

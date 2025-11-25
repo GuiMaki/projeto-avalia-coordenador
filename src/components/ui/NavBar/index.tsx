@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
 import { useDefaultModal } from '@/store/defaultModalStore';
@@ -29,10 +31,10 @@ const NavBar = ({ page }: NavBarProps) => {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-between border-r border-neutral-300 px-2 py-6">
+    <div className="fixed left-0 top-0 flex h-screen flex-col items-center justify-between border-r border-neutral-300 bg-white px-2 py-6">
       <div className="flex flex-col gap-2">
         <NavBarIcon
-          fill={page === 'Home' ? colors.primary : colors.neutral[600]}
+          fill={page === 'Home' ? colors.primary[100] : colors.neutral[60]}
           icon="HomeIcon"
           label="Home"
           selected={page === 'Home'}

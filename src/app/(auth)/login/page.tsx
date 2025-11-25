@@ -43,7 +43,7 @@ const Login = () => {
         className="flex w-[492px] flex-col items-center justify-center gap-10 rounded-3xl p-4"
         style={{ background: 'rgba(255, 255, 255, 0.8)' }}
       >
-        <span className="text-2xl font-semibold text-[#24366E]">
+        <span className="text-primary-100 text-2xl font-semibold">
           Área do coordenador
         </span>
 
@@ -65,13 +65,13 @@ const Login = () => {
         />
 
         <Button
-          color={colors.primary}
+          color={colors.primary[100]}
           style={{
             width: '100%',
-            backgroundColor: colors.primary,
+            backgroundColor: colors.primary[100],
             color: '#FFFFFF',
             cursor: 'pointer',
-            borderColor: colors.primary,
+            borderColor: colors.primary[100],
           }}
           text="Entrar"
           wired={false}

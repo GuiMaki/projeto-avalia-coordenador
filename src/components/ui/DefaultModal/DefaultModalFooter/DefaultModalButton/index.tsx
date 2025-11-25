@@ -23,7 +23,7 @@ const DefaultModalButton = ({ text, onClick }: Props) => {
       style={{ cursor: isLoading ? 'default' : 'pointer' }}
       onClick={handleOnClick}
     >
-      <p className="text-lg font-normal" style={{ color: colors.primary }}>
+      <p className="text-lg font-normal" style={{ color: colors.primary[100] }}>
         {text}
       </p>
 

@@ -4,7 +4,7 @@ import Icon from '../Icon';
 
 type Props = {
   isSelected: boolean;
-  label: string;
+  label?: string;
   onClick: () => void;
 };
 
@@ -17,13 +17,13 @@ const CheckBox = ({ isSelected, label, onClick }: Props) => {
       <div
         className="flex h-6 w-6 items-center justify-center rounded-md"
         style={{
-          backgroundColor: isSelected ? colors.alert.success : 'transparent',
-          border: isSelected ? 'none' : `1px solid ${colors.neutral[200]}`,
+          backgroundColor: isSelected ? colors.primary[100] : 'transparent',
+          border: isSelected ? 'none' : `1px solid ${colors.neutral[20]}`,
         }}
       >
         {isSelected && (
           <Icon
-            color={colors.white}
+            color={colors.neutral.white}
             name="CheckIcon"
             size={12}
             strokeWidth={3}
