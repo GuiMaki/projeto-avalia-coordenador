@@ -7,8 +7,8 @@ type Props = {
 
 const DefaultModalHeader = ({ title, onClose }: Props) => {
   return (
-    <div className="bg-neutral-background border-neutral-20 flex items-center justify-between border-b p-3">
-      <h5 className="text-xl">{title}</h5>
+    <div className="bg-neutral-background flex items-center justify-between border-b border-neutral-200 p-3">
+      <h5 className="text-xl font-normal">{title}</h5>
 
       {onClose && (
         <button

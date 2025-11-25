@@ -2,12 +2,12 @@
 
 import NavBar from '@/components/ui/NavBar';
 
-const Home = () => {
+const Teachers = () => {
   return (
     <div className="flex flex-1 items-start">
-      <NavBar page="Home" />
+      <NavBar page="Teachers" />
     </div>
   );
 };
 
-export default Home;
+export default Teachers;

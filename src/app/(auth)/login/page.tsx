@@ -23,7 +23,7 @@ const Login = () => {
 
   const onSubmit = (data: LoginForm) => {
     console.log(data);
-    router.push('home');
+    router.replace('/home');
   };
 
   return (
