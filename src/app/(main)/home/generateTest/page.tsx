@@ -146,14 +146,6 @@ const GenerateTest = () => {
                 type="date"
               />
 
-              <DropdownFormTeacher
-                control={control}
-                label="Professor"
-                name="teacher"
-                options={teacherData || []}
-                placeholder="Selecione um professor"
-              />
-
               <Input
                 control={control}
                 label="Tipo de Avaliação"
@@ -177,6 +169,14 @@ const GenerateTest = () => {
                 type="number"
               />
             </div>
+
+            <DropdownFormTeacher
+              control={control}
+              label="Professor"
+              name="teacher"
+              options={teacherData || []}
+              placeholder="Selecione um professor"
+            />
           </div>
 
           <div className="flex flex-col p-5">
