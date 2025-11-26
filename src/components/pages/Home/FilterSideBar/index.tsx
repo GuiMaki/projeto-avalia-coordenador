@@ -137,9 +137,9 @@ const FilterSidebar = ({
                   {teacherData?.map(teacher => (
                     <CheckBox
                       key={teacher.id}
-                      isSelected={selectedTeachers.includes(teacher.id)}
+                      isSelected={selectedTeachers.includes(teacher.user.id)}
                       label={teacher.name}
-                      onClick={() => handleTeacherToggle(teacher.id)}
+                      onClick={() => handleTeacherToggle(teacher.user.id)}
                     />
                   ))}
                 </div>
