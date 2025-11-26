@@ -4,6 +4,9 @@ export const baseURL = 'https://projeto-avalia-hh2z.onrender.com/';
 
 const http = axios.create({
   baseURL: `${baseURL}`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 http.interceptors.request.use(
