@@ -7,12 +7,18 @@ export const TeacherSchema = z
     email: z.string().email('Email inválido').min(1, 'Insira o email'),
     disciplines: z
       .array(
-        z.object({
-          id: z.number(),
-          name: z.string(),
-        }),
+        z.union([
+          z.object({
+            id: z.number(),
+            name: z.string(),
+          }),
+          z.number(), // Aceita também apenas o ID
+        ]),
       )
-      .min(1, 'Selecione ao menos uma disciplina'),
+      .min(1, 'Selecione ao menos uma disciplina')
+      .transform(disciplines =>
+        disciplines.map(d => (typeof d === 'number' ? { id: d, name: '' } : d)),
+      ),
     password: z
       .string()
       .min(6, 'A senha deve ter no mínimo 6 caracteres')
