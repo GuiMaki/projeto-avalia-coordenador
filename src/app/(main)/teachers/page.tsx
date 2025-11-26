@@ -190,7 +190,7 @@ const Teachers = () => {
                         className="text-lg"
                         style={{ color: colors.neutral[60] }}
                       >
-                        {teacher.user.email}
+                        {teacher.user?.email}
                       </span>
                     </td>
 
