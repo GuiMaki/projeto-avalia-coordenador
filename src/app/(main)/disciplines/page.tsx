@@ -7,76 +7,61 @@ import EditDisciplineModal from '@/components/pages/Home/EditDisciplineModal';
 import { Icon } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
+import { IDiscipline } from '@/interfaces/disciplines';
+import {
+  useCreateDiscipline,
+  useDeleteDiscipline,
+  useDisciplines,
+  useEditDiscipline,
+} from '@/services/api/disciplines';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { DisciplineForm } from '@/validation/discipline.validation';
-
-type Discipline = {
-  id: string;
-  name: string;
-};
-
-// Mock de dados - substitua pela sua API
-const mockDisciplines: Discipline[] = [
-  { id: '1', name: 'Matemática' },
-  { id: '2', name: 'Português' },
-  { id: '3', name: 'História' },
-  { id: '4', name: 'Geografia' },
-  { id: '5', name: 'Ciências' },
-  { id: '6', name: 'Inglês' },
-  { id: '7', name: 'Física' },
-  { id: '8', name: 'Química' },
-  { id: '9', name: 'Biologia' },
-  { id: '10', name: 'Educação Física' },
-  { id: '11', name: 'Artes' },
-];
 
 const Disciplines = () => {
   const [search, setSearch] = useState('');
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedDiscipline, setSelectedDiscipline] =
-    useState<Discipline | null>(null);
+    useState<IDiscipline | null>(null);
   const { openModal, closeModal } = useDefaultModal();
+  const { data } = useDisciplines({ name: search });
+  const { mutateAsync: createDiscipline } = useCreateDiscipline();
+  const { mutateAsync: editDiscipline } = useEditDiscipline();
+  const { mutateAsync: deleteDiscipline } = useDeleteDiscipline();
 
-  const handleCreate = (data: DisciplineForm) => {
-    console.log('Nova disciplina:', data);
-    // Aqui você faria a chamada para criar a disciplina
-    // exemplo: await createDiscipline(data);
+  const handleCreate = async (data: DisciplineForm) => {
+    await createDiscipline({ name: data.name });
     setCreateModalOpen(false);
   };
 
-  const handleEdit = (discipline: Discipline) => {
+  const handleEdit = (discipline: IDiscipline) => {
     setSelectedDiscipline(discipline);
     setEditModalOpen(true);
   };
 
-  const handleEditConfirm = (data: DisciplineForm) => {
-    console.log('Disciplina editada:', { id: selectedDiscipline?.id, ...data });
-    // Aqui você faria a chamada para atualizar a disciplina
-    // exemplo: await updateDiscipline(selectedDiscipline.id, data);
+  const handleEditConfirm = async (data: DisciplineForm) => {
+    await editDiscipline({
+      id: selectedDiscipline?.id || 0,
+      params: { name: data.name },
+    });
     setEditModalOpen(false);
     setSelectedDiscipline(null);
   };
 
-  const handleDelete = (discipline: Discipline) => {
+  const handleDelete = (discipline: IDiscipline) => {
     openModal({
       title: 'Excluir disciplina',
       message: `Deseja excluir a disciplina ${discipline.name}?`,
       confirmText: 'Excluir',
-      onConfirm: () => {
-        console.log('Disciplina excluída:', discipline);
+      onConfirm: async () => {
+        await deleteDiscipline(discipline.id);
         closeModal();
       },
       cancelText: 'Cancelar',
       onCancel: closeModal,
     });
   };
-
-  // Filtra disciplinas baseado na busca
-  const filteredDisciplines = mockDisciplines.filter(discipline =>
-    discipline.name.toLowerCase().includes(search.toLowerCase()),
-  );
 
   return (
     <>
@@ -117,8 +102,8 @@ const Disciplines = () => {
 
           {/* Grid de disciplinas */}
           <div className="m-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredDisciplines.length > 0 ? (
-              filteredDisciplines.map(discipline => (
+            {data && data.length > 0 ? (
+              data.map(discipline => (
                 <div
                   key={discipline.id}
                   className="flex items-center justify-between rounded-lg bg-white p-4 shadow transition-shadow hover:shadow-md"
