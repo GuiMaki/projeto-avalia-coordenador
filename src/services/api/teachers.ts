@@ -91,3 +91,29 @@ export const useDeleteTeacher = () => {
     },
   });
 };
+
+export type ChangePasswordForm = {
+  novaSenha: string;
+  confirmSenha: string;
+};
+
+export const useEditTeacherPassword = () => {
+  const queryClient = useQueryClient();
+
+  const editTeacherPassword = async (variables: {
+    id: number;
+    form: ChangePasswordForm;
+  }) => {
+    const { id, form } = variables;
+    await http.post(`${BASE_URL}/${id}/senha`, form);
+  };
+
+  return useMutation({
+    mutationFn: editTeacherPassword,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.teachers.all,
+      });
+    },
+  });
+};

@@ -10,7 +10,13 @@ import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
 import { useDebounce } from '@/hooks/common';
 import { ITeacher } from '@/interfaces/teachers';
-import { useTeachers } from '@/services/api/teachers';
+import {
+  useCreateTeacher,
+  useDeleteTeacher,
+  useEditTeacher,
+  useEditTeacherPassword,
+  useTeachers,
+} from '@/services/api/teachers';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { TeacherForm } from '@/validation/teacher.validation';
@@ -25,11 +31,24 @@ const Teachers = () => {
   const { openModal, closeModal } = useDefaultModal();
 
   const { data } = useTeachers({ name: debouncedSearch });
+  const { mutateAsync: createTeacher } = useCreateTeacher();
+  const { mutateAsync: editTeacher } = useEditTeacher();
+  const { mutateAsync: deleteTeacher } = useDeleteTeacher();
+  const { mutateAsync: editTeacherPassword } = useEditTeacherPassword();
 
-  const handleCreate = (data: TeacherForm) => {
-    console.log('Novo professor:', data);
-    // Aqui você faria a chamada para criar o professor
-    // exemplo: await createTeacher(data);
+  const handleCreate = async (data: TeacherForm) => {
+    const disciplinesId = data.disciplines.map(dis => dis.id);
+
+    const form = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      subjectIds: disciplinesId,
+      password: data.password || '',
+      confirmPassword: data.confirmPassword || '',
+    };
+
+    await createTeacher(form);
     setCreateModalOpen(false);
   };
 
@@ -38,10 +57,18 @@ const Teachers = () => {
     setEditModalOpen(true);
   };
 
-  const handleEditConfirm = (data: TeacherForm) => {
-    console.log('Professor editado:', { id: selectedTeacher?.id, ...data });
-    // Aqui você faria a chamada para atualizar o professor
-    // exemplo: await updateTeacher(selectedTeacher.id, data);
+  const handleEditConfirm = async (data: TeacherForm) => {
+    const disciplinesId = data.disciplines.map(dis => dis.id);
+
+    const form = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      subjectIds: disciplinesId,
+    };
+
+    await editTeacher({ id: selectedTeacher?.id || 0, form });
+
     setEditModalOpen(false);
     setSelectedTeacher(null);
   };
@@ -51,8 +78,8 @@ const Teachers = () => {
       title: 'Excluir professor',
       message: `Deseja excluir o professor ${teacher.name}?`,
       confirmText: 'Excluir',
-      onConfirm: () => {
-        console.log('Professor excluído:', teacher);
+      onConfirm: async () => {
+        await deleteTeacher(teacher.id);
         closeModal();
       },
       cancelText: 'Cancelar',
@@ -222,7 +249,10 @@ const Teachers = () => {
                         <button
                           className="rounded-full p-2 transition-colors hover:bg-neutral-100"
                           title="Redefinir senha"
-                          onClick={() => setResetPasswordModalOpen(true)}
+                          onClick={() => {
+                            setSelectedTeacher(teacher);
+                            setResetPasswordModalOpen(true);
+                          }}
                         >
                           <Icon
                             color={colors.neutral[60]}
@@ -270,8 +300,13 @@ const Teachers = () => {
       <ResetPasswordModal
         isOpen={resetPasswordModalOpen}
         onCancel={() => setResetPasswordModalOpen(false)}
-        onConfirm={data => {
-          console.log(data);
+        onConfirm={async data => {
+          const form = {
+            novaSenha: data.newPassword,
+            confirmSenha: data.confirmPassword,
+          };
+
+          await editTeacherPassword({ id: selectedTeacher?.id || 0, form });
           setResetPasswordModalOpen(false);
         }}
       />
