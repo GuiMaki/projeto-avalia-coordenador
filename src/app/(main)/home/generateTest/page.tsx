@@ -148,6 +148,7 @@ const GenerateTest = () => {
 
               <DropdownFormTeacher
                 control={control}
+                label="Professor"
                 name="teacher"
                 options={teacherData || []}
                 placeholder="Selecione um professor"

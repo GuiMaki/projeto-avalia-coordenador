@@ -10,6 +10,7 @@ import { ITeacher } from '@/interfaces/teachers';
 import colors from '@/theme/colors';
 
 type DropdownFormProps<T extends FieldValues> = {
+  label: string;
   name: Path<T>;
   control: Control<T>;
   options: ITeacher[];
@@ -17,6 +18,7 @@ type DropdownFormProps<T extends FieldValues> = {
 };
 
 export const DropdownFormTeacher = <T extends FieldValues>({
+  label,
   name,
   control,
   options,
@@ -50,9 +52,18 @@ export const DropdownFormTeacher = <T extends FieldValues>({
   const selectedOption = options.find(o => o.id === value);
 
   return (
-    <div ref={dropdownRef} className="relative w-full">
+    <div ref={dropdownRef} className="relative w-full flex-col gap-2">
+      {/* LABEL IGUAL DO INPUT */}
+      {label && (
+        <label className="mb-2 block text-xl text-[#454545]" htmlFor={name}>
+          {label}
+        </label>
+      )}
+
       <button
-        className="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-gray-700 shadow-sm hover:border-gray-400 focus:outline-none"
+        className="text-neutral-60 flex w-full items-center justify-between rounded-lg border border-[#D0D0D0] bg-white p-2 px-4 py-2 text-left text-lg shadow-sm hover:border-gray-400 focus:outline-none"
+        id={name} // pra conectar o label com o botão
+        style={{ paddingRight: 44 }}
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
       >
@@ -67,11 +78,11 @@ export const DropdownFormTeacher = <T extends FieldValues>({
       </button>
 
       {isOpen && (
-        <ul className="animate-slideDown absolute left-0 z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute left-0 z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg">
           {options.map(option => (
             <li
               key={option.id}
-              className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+              className="text-neutral-60 cursor-pointer px-4 py-2 text-lg hover:bg-gray-100"
               onClick={() => handleSelect(option)}
             >
               {option.name}
