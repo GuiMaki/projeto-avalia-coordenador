@@ -34,7 +34,7 @@ export const useCreateTeacher = () => {
   const queryClient = useQueryClient();
 
   const createTeacher = async (form: CreateTeacherForm) => {
-    await http.put(BASE_URL, form);
+    await http.post(BASE_URL, form);
   };
 
   return useMutation({
@@ -62,7 +62,7 @@ export const useEditTeacher = () => {
     form: EditTeacherForm;
   }) => {
     const { id, form } = variables;
-    await http.post(`${BASE_URL}/${id}`, form);
+    await http.put(`${BASE_URL}/${id}`, form);
   };
 
   return useMutation({
