@@ -66,7 +66,7 @@ const QuestionItemWithCheckbox = ({
             className="flex-1 select-none text-2xl font-semibold"
             style={{ color: colors.neutral[80] }}
           >
-            {`${questionText} - ${discipline} - ${teacher} (${date})`}
+            {`${questionText} - ${discipline.name} - ${teacher} (${date})`}
           </span>
 
           <motion.div
