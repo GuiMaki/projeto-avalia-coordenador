@@ -162,7 +162,7 @@ const Home = () => {
                     correct: item.correctAnswer === 'E',
                   }}
                   date={format(item.updatedAt, 'dd/MM/yyyy')}
-                  discipline={item.subject.id}
+                  discipline={item.subject}
                   questionId={item.id}
                   questionText={item.title}
                   teacher={item.createdBy.username}

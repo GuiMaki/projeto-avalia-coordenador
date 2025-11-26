@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
 import { Icon } from '@/components/ui';
+import { IDiscipline } from '@/interfaces/disciplines';
 import { useDeleteQuestion, useEditQuestion } from '@/services/api/questions';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
@@ -19,7 +20,7 @@ export type Answer = {
 type QuestionItemProps = {
   questionId: number;
   questionText: string;
-  discipline: number;
+  discipline: IDiscipline;
   teacher?: string;
   answer1: Answer;
   answer2: Answer;
@@ -113,7 +114,7 @@ const QuestionItem = ({
             className="flex-1 select-none text-2xl font-semibold"
             style={{ color: colors.neutral[80] }}
           >
-            {`${questionText} - ${discipline} - ${teacher} (${date})`}
+            {`${questionText} - ${discipline.name} - ${teacher} (${date})`}
           </span>
 
           <div className="flex items-center justify-center gap-3">
@@ -219,7 +220,7 @@ const QuestionItem = ({
         answer3={answer3}
         answer4={answer4}
         answer5={answer5}
-        discipline={discipline}
+        discipline={discipline.id}
         isOpen={editModalOpen}
         title={questionText}
         onCancel={() => setEditModalOpen(false)}
