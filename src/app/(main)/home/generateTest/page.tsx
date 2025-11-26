@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,59 +13,29 @@ import QuestionItemWithCheckbox from '@/components/pages/Home/QuestionItemWithCh
 import { Button, Icon, Input } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
+import { useDebounce } from '@/hooks/common';
+import { useQuestions } from '@/services/api/questions';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { TestForm, TestSchema } from '@/validation/test.validation';
 
-const mockQuestions = [
-  {
-    id: '1',
-    questionText: 'Qual desses é bagre?',
-    discipline: 'Bagriçe',
-    teacher: 'Maka',
-    date: '25/12/2025',
-    answer1: { label: 'Willian', correct: true },
-    answer2: { label: 'Vini', correct: false },
-    answer3: { label: 'Doni', correct: false },
-    answer4: { label: 'Kenzo', correct: false },
-    answer5: { label: 'Maka', correct: false },
-  },
-  {
-    id: '2',
-    questionText: 'Quem é o mais inteligente?',
-    discipline: 'Matemática',
-    teacher: 'Prof. João',
-    date: '20/11/2025',
-    answer1: { label: 'Einstein', correct: true },
-    answer2: { label: 'Newton', correct: false },
-    answer3: { label: 'Platão', correct: false },
-    answer4: { label: 'Aristóteles', correct: false },
-    answer5: { label: 'Sócrates', correct: false },
-  },
-  {
-    id: '3',
-    questionText: 'Capital do Brasil?',
-    discipline: 'Geografia',
-    teacher: 'Prof. Maria',
-    date: '15/10/2025',
-    answer1: { label: 'Brasília', correct: true },
-    answer2: { label: 'São Paulo', correct: false },
-    answer3: { label: 'Rio de Janeiro', correct: false },
-    answer4: { label: 'Salvador', correct: false },
-    answer5: { label: 'Recife', correct: false },
-  },
-];
-
 const GenerateTest = () => {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterState>({
     disciplines: [],
     teachers: [],
   });
-  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+  const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
   const { openModal, closeModal } = useDefaultModal();
+
+  const { data } = useQuestions({
+    title: debouncedSearch,
+    disciplinaIds: activeFilters.disciplines,
+    professorIds: activeFilters.teachers,
+  });
 
   const { control, handleSubmit, setValue } = useForm<TestForm>({
     resolver: zodResolver(TestSchema),
@@ -84,16 +55,13 @@ const GenerateTest = () => {
     console.log('Filtros aplicados:', filters);
   };
 
-  const handleQuestionToggle = (questionId: string) => {
+  const handleQuestionToggle = (questionId: number) => {
     setSelectedQuestions(prev => {
       const newSelection = prev.includes(questionId)
         ? prev.filter(id => id !== questionId)
         : [...prev, questionId];
 
-      setValue(
-        'questions',
-        newSelection.map(id => ({ id, points: 1 })),
-      );
+      setValue('questions', newSelection);
 
       return newSelection;
     });
@@ -111,18 +79,6 @@ const GenerateTest = () => {
       onConfirm: closeModal,
     });
   };
-
-  const filteredQuestions = mockQuestions.filter(question => {
-    const matchesSearch = question.questionText
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesDiscipline = activeFilters.disciplines.length === 0;
-
-    const matchesTeacher = activeFilters.teachers.length === 0;
-
-    return matchesSearch && matchesDiscipline && matchesTeacher;
-  });
 
   return (
     <>
@@ -250,21 +206,36 @@ const GenerateTest = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              {filteredQuestions.length > 0 ? (
-                filteredQuestions.map(question => (
+              {data && data.length > 0 ? (
+                data.map(item => (
                   <QuestionItemWithCheckbox
-                    key={question.id}
-                    answer1={question.answer1}
-                    answer2={question.answer2}
-                    answer3={question.answer3}
-                    answer4={question.answer4}
-                    answer5={question.answer5}
-                    date={question.date}
-                    discipline={question.discipline}
-                    isSelected={selectedQuestions.includes(question.id)}
-                    questionText={question.questionText}
-                    teacher={question.teacher}
-                    onToggle={() => handleQuestionToggle(question.id)}
+                    key={item.id}
+                    answer1={{
+                      label: item.answerA,
+                      correct: item.correctAnswer === 'A',
+                    }}
+                    answer2={{
+                      label: item.answerB,
+                      correct: item.correctAnswer === 'B',
+                    }}
+                    answer3={{
+                      label: item.answerC,
+                      correct: item.correctAnswer === 'C',
+                    }}
+                    answer4={{
+                      label: item.answerD,
+                      correct: item.correctAnswer === 'D',
+                    }}
+                    answer5={{
+                      label: item.answerE,
+                      correct: item.correctAnswer === 'E',
+                    }}
+                    date={format(item.updatedAt, 'dd/MM/yyyy')}
+                    discipline={item.subject}
+                    isSelected={selectedQuestions.includes(item.id)}
+                    questionText={item.title}
+                    teacher={item.createdBy.email}
+                    onToggle={() => handleQuestionToggle(item.id)}
                   />
                 ))
               ) : (

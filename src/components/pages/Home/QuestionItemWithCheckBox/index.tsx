@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { Icon } from '@/components/ui';
 import CheckBox from '@/components/ui/CheckBox';
+import { IDiscipline } from '@/interfaces/disciplines';
 import colors from '@/theme/colors';
 
 export type Answer = {
@@ -14,7 +15,7 @@ export type Answer = {
 
 type QuestionItemWithCheckboxProps = {
   questionText: string;
-  discipline: string;
+  discipline: IDiscipline;
   teacher?: string;
   answer1: Answer;
   answer2: Answer;
