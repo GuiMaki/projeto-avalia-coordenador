@@ -156,13 +156,6 @@ const GenerateTest = () => {
 
               <Input
                 control={control}
-                label="Professor"
-                name="teacher"
-                placeholder="Nome do professor"
-              />
-
-              <Input
-                control={control}
                 label="Tipo de Avaliação"
                 name="type"
                 placeholder="Ex: Prova, Simulado, Teste"

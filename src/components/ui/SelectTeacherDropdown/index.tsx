@@ -52,7 +52,7 @@ export const DropdownFormTeacher = <T extends FieldValues>({
   const selectedOption = options.find(o => o.id === value);
 
   return (
-    <div ref={dropdownRef} className="relative w-full flex-col gap-2">
+    <div ref={dropdownRef} className="relative w-full flex-col">
       {/* LABEL IGUAL DO INPUT */}
       {label && (
         <label className="mb-2 block text-xl text-[#454545]" htmlFor={name}>
