@@ -28,6 +28,8 @@ const Home = () => {
     teachers: [],
   });
 
+  console.log(activeFilters);
+
   const { data } = useQuestions({
     title: debouncedSearch,
     disciplinaIds: activeFilters.disciplines,
