@@ -7,21 +7,9 @@ import DefaultModalBackdrop from '@/components/ui/DefaultModal/DefaultModalBackd
 import DefaultModalFooter from '@/components/ui/DefaultModal/DefaultModalFooter';
 import DefaultModalHeader from '@/components/ui/DefaultModal/DefaultModalHeader';
 import MultiSelectDropdown from '@/components/ui/MultiSelectDropdown/index';
+import { IDiscipline } from '@/interfaces/disciplines';
+import { useDisciplines } from '@/services/api/disciplines';
 import { TeacherForm, TeacherSchema } from '@/validation/teacher.validation';
-
-const disciplines = [
-  { label: 'Matemática', value: 'matematica' },
-  { label: 'Português', value: 'portugues' },
-  { label: 'História', value: 'historia' },
-  { label: 'Geografia', value: 'geografia' },
-  { label: 'Ciências', value: 'ciencias' },
-  { label: 'Inglês', value: 'ingles' },
-  { label: 'Física', value: 'fisica' },
-  { label: 'Química', value: 'quimica' },
-  { label: 'Biologia', value: 'biologia' },
-  { label: 'Educação Física', value: 'educacao_fisica' },
-  { label: 'Artes', value: 'artes' },
-];
 
 type EditTeacherModalProps = {
   isOpen: boolean;
@@ -32,7 +20,7 @@ type EditTeacherModalProps = {
     name: string;
     phone: string;
     email: string;
-    disciplines: string[];
+    disciplines: IDiscipline[];
   } | null;
 };
 
@@ -42,6 +30,8 @@ const EditTeacherModal = ({
   onConfirm,
   teacher,
 }: EditTeacherModalProps) => {
+  const { data } = useDisciplines({ name: '' });
+
   const { control, handleSubmit, reset } = useForm<TeacherForm>({
     resolver: zodResolver(TeacherSchema),
     mode: 'onChange',
@@ -101,7 +91,7 @@ const EditTeacherModal = ({
             control={control}
             label="Disciplinas"
             name="disciplines"
-            options={disciplines}
+            options={data || []}
             placeholder="Selecione as disciplinas"
           />
         </div>

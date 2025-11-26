@@ -8,6 +8,7 @@ import ResetPasswordModal from '@/components/pages/Home/ResetPasswordModal';
 import { Icon } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
+import { IDiscipline } from '@/interfaces/disciplines';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { TeacherForm } from '@/validation/teacher.validation';
@@ -16,7 +17,7 @@ type Teacher = {
   id: string;
   name: string;
   email: string;
-  disciplines: string[];
+  disciplines: IDiscipline[];
   phone: string;
 };
 
@@ -26,29 +27,13 @@ const mockTeachers: Teacher[] = [
     id: '1',
     name: 'Prof. João Silva',
     email: 'joao.silva@escola.com',
-    disciplines: ['Matemática', 'Física'],
+    disciplines: [
+      {
+        id: 1,
+        name: 'Matemática',
+      },
+    ],
     phone: '(11) 98765-4321',
-  },
-  {
-    id: '2',
-    name: 'Prof. Maria Santos',
-    email: 'maria.santos@escola.com',
-    disciplines: ['Português', 'Literatura'],
-    phone: '(11) 98765-4322',
-  },
-  {
-    id: '3',
-    name: 'Prof. Pedro Costa',
-    email: 'pedro.costa@escola.com',
-    disciplines: ['História', 'Geografia'],
-    phone: '(11) 98765-4323',
-  },
-  {
-    id: '4',
-    name: 'Prof. Ana Lima',
-    email: 'ana.lima@escola.com',
-    disciplines: ['Biologia', 'Química'],
-    phone: '(11) 98765-4324',
   },
 ];
 
@@ -100,7 +85,7 @@ const Teachers = () => {
       teacher.name.toLowerCase().includes(search.toLowerCase()) ||
       teacher.email.toLowerCase().includes(search.toLowerCase()) ||
       teacher.disciplines.some(d =>
-        d.toLowerCase().includes(search.toLowerCase()),
+        d.name.toLowerCase().includes(search.toLowerCase()),
       ),
   );
 
@@ -215,14 +200,14 @@ const Teachers = () => {
                       <div className="flex flex-wrap gap-2">
                         {teacher.disciplines.map(discipline => (
                           <span
-                            key={discipline}
+                            key={discipline.id}
                             className="rounded-full px-3 py-1 text-sm font-medium"
                             style={{
                               backgroundColor: colors.primary[100],
                               color: colors.neutral.white,
                             }}
                           >
-                            {discipline}
+                            {discipline.name}
                           </span>
                         ))}
                       </div>

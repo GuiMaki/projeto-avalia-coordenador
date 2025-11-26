@@ -6,17 +6,13 @@ import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 import { Icon } from '@/components/ui';
 import CheckBox from '@/components/ui/CheckBox';
+import { IDiscipline } from '@/interfaces/disciplines';
 import colors from '@/theme/colors';
-
-type DropdownOption = {
-  label: string;
-  value: string;
-};
 
 type MultiSelectDropdownProps<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-  options: DropdownOption[];
+  options: IDiscipline[];
   placeholder?: string;
   label?: string;
 };
@@ -49,9 +45,9 @@ const MultiSelectDropdown = <T extends FieldValues>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedValues = (value as string[]) || [];
+  const selectedValues = (value as number[]) || [];
 
-  const handleToggle = (optionValue: string) => {
+  const handleToggle = (optionValue: number) => {
     const newValues = selectedValues.includes(optionValue)
       ? selectedValues.filter(v => v !== optionValue)
       : [...selectedValues, optionValue];
@@ -59,8 +55,8 @@ const MultiSelectDropdown = <T extends FieldValues>({
   };
 
   const selectedLabels = options
-    .filter(opt => selectedValues.includes(opt.value))
-    .map(opt => opt.label);
+    .filter(opt => selectedValues.includes(opt.id))
+    .map(opt => opt.name);
 
   const displayText =
     selectedLabels.length > 0 ? selectedLabels.join(', ') : placeholder;
@@ -102,13 +98,13 @@ const MultiSelectDropdown = <T extends FieldValues>({
           <ul className="absolute left-0 z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
             {options.map(option => (
               <li
-                key={option.value}
+                key={option.id}
                 className="cursor-pointer px-4 py-2 hover:bg-gray-100"
               >
                 <CheckBox
-                  isSelected={selectedValues.includes(option.value)}
-                  label={option.label}
-                  onClick={() => handleToggle(option.value)}
+                  isSelected={selectedValues.includes(option.id)}
+                  label={option.name}
+                  onClick={() => handleToggle(option.id)}
                 />
               </li>
             ))}

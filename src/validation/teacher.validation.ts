@@ -6,7 +6,12 @@ export const TeacherSchema = z
     phone: z.string().min(1, 'Insira o telefone'),
     email: z.string().email('Email inválido').min(1, 'Insira o email'),
     disciplines: z
-      .array(z.string())
+      .array(
+        z.object({
+          id: z.number(),
+          name: z.string(),
+        }),
+      )
       .min(1, 'Selecione ao menos uma disciplina'),
     password: z
       .string()
