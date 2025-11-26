@@ -36,6 +36,8 @@ const Teachers = () => {
   const { mutateAsync: deleteTeacher } = useDeleteTeacher();
   const { mutateAsync: editTeacherPassword } = useEditTeacherPassword();
 
+  console.log(data);
+
   const handleCreate = async (data: TeacherForm) => {
     const disciplinesId = data.disciplines.map(dis => dis.id);
 
@@ -196,18 +198,27 @@ const Teachers = () => {
 
                     <td className="px-6 py-2">
                       <div className="flex flex-wrap gap-2">
-                        {teacher.subjects.map(discipline => (
+                        {teacher.subjects && teacher.subjects.length > 0 ? (
+                          teacher.subjects.map(discipline => (
+                            <span
+                              key={discipline.id}
+                              className="rounded-full px-3 py-1 text-sm font-medium"
+                              style={{
+                                backgroundColor: colors.primary[100],
+                                color: colors.neutral.white,
+                              }}
+                            >
+                              {discipline.name}
+                            </span>
+                          ))
+                        ) : (
                           <span
-                            key={discipline.id}
-                            className="rounded-full px-3 py-1 text-sm font-medium"
-                            style={{
-                              backgroundColor: colors.primary[100],
-                              color: colors.neutral.white,
-                            }}
+                            className="text-sm"
+                            style={{ color: colors.neutral[60] }}
                           >
-                            {discipline.name}
+                            Sem disciplinas
                           </span>
-                        ))}
+                        )}
                       </div>
                     </td>
 
