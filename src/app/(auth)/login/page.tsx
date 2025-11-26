@@ -2,28 +2,27 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { Button, Input } from '@/components/ui';
+import { useAuth } from '@/contexts/authContext';
 import colors from '@/theme/colors';
 import { LoginForm, LoginSchema } from '@/validation/login.validation';
 import { FatecImg } from '@public/images';
 
 const Login = () => {
-  const router = useRouter();
+  const { login } = useAuth();
 
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: 'dasdsa@gmai.com',
-      password: '12134',
+      email: 'usuario1@example.com',
+      password: '123456',
     },
   });
 
-  const onSubmit = (data: LoginForm) => {
-    console.log(data);
-    router.replace('/home');
+  const onSubmit = async (data: LoginForm) => {
+    await login(data);
   };
 
   return (
