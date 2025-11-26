@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { queryKeys } from '@/constants/queryKeys';
 import { IDiscipline } from '@/interfaces/disciplines';
 
 import { http } from '../http';
@@ -15,7 +16,7 @@ export const useDisciplines = (params: { name: string }) => {
   };
 
   return useQuery({
-    queryKey: ['Disciplines'],
+    queryKey: queryKeys.disciplines.search(params),
     queryFn: disciplines,
   });
 };
@@ -30,7 +31,9 @@ export const useCreateDiscipline = () => {
   return useMutation({
     mutationFn: createDiscipline,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Disciplines'] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.disciplines.all,
+      });
     },
   });
 };
@@ -49,7 +52,9 @@ export const useEditDiscipline = () => {
   return useMutation({
     mutationFn: editDiscipline,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Disciplines'] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.disciplines.all,
+      });
     },
   });
 };
@@ -64,7 +69,9 @@ export const useDeleteDiscipline = () => {
   return useMutation({
     mutationFn: deleteDiscipline,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['Disciplines'] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.disciplines.all,
+      });
     },
   });
 };

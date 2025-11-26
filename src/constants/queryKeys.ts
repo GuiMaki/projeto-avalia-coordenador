@@ -7,6 +7,8 @@ export const queryKeys = {
   disciplines: {
     all: ['Disciplines'] as const,
     lists: () => [...queryKeys.disciplines.all, 'list'] as const,
+    search: (params: { name: string }) =>
+      [...queryKeys.disciplines.all, 'search', params] as const,
   },
 } as const;
 
