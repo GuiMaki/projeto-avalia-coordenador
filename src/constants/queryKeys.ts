@@ -10,6 +10,13 @@ export const queryKeys = {
     search: (params: { name: string }) =>
       [...queryKeys.disciplines.all, 'search', params] as const,
   },
+
+  teachers: {
+    all: ['Teachers'] as const,
+    lists: () => [...queryKeys.disciplines.all, 'list'] as const,
+    search: (params: { name: string }) =>
+      [...queryKeys.disciplines.all, 'search', params] as const,
+  },
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-unused-vars

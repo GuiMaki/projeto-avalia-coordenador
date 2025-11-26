@@ -8,42 +8,23 @@ import ResetPasswordModal from '@/components/pages/Home/ResetPasswordModal';
 import { Icon } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
-import { IDiscipline } from '@/interfaces/disciplines';
+import { useDebounce } from '@/hooks/common';
+import { ITeacher } from '@/interfaces/teachers';
+import { useTeachers } from '@/services/api/teachers';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { TeacherForm } from '@/validation/teacher.validation';
 
-type Teacher = {
-  id: string;
-  name: string;
-  email: string;
-  disciplines: IDiscipline[];
-  phone: string;
-};
-
-// Mock de dados - substitua pela sua API
-const mockTeachers: Teacher[] = [
-  {
-    id: '1',
-    name: 'Prof. João Silva',
-    email: 'joao.silva@escola.com',
-    disciplines: [
-      {
-        id: 1,
-        name: 'Matemática',
-      },
-    ],
-    phone: '(11) 98765-4321',
-  },
-];
-
 const Teachers = () => {
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+  const [selectedTeacher, setSelectedTeacher] = useState<ITeacher | null>(null);
   const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const { openModal, closeModal } = useDefaultModal();
+
+  const { data } = useTeachers({ name: debouncedSearch });
 
   const handleCreate = (data: TeacherForm) => {
     console.log('Novo professor:', data);
@@ -52,7 +33,7 @@ const Teachers = () => {
     setCreateModalOpen(false);
   };
 
-  const handleEdit = (teacher: Teacher) => {
+  const handleEdit = (teacher: ITeacher) => {
     setSelectedTeacher(teacher);
     setEditModalOpen(true);
   };
@@ -65,7 +46,7 @@ const Teachers = () => {
     setSelectedTeacher(null);
   };
 
-  const handleDelete = (teacher: Teacher) => {
+  const handleDelete = (teacher: ITeacher) => {
     openModal({
       title: 'Excluir professor',
       message: `Deseja excluir o professor ${teacher.name}?`,
@@ -78,16 +59,6 @@ const Teachers = () => {
       onCancel: closeModal,
     });
   };
-
-  // Filtra professores baseado na busca
-  const filteredTeachers = mockTeachers.filter(
-    teacher =>
-      teacher.name.toLowerCase().includes(search.toLowerCase()) ||
-      teacher.email.toLowerCase().includes(search.toLowerCase()) ||
-      teacher.disciplines.some(d =>
-        d.name.toLowerCase().includes(search.toLowerCase()),
-      ),
-  );
 
   return (
     <div className="flex flex-1 items-start">
@@ -168,8 +139,8 @@ const Teachers = () => {
             </thead>
 
             <tbody>
-              {filteredTeachers.length > 0 ? (
-                filteredTeachers.map((teacher, index) => (
+              {data && data.length > 0 ? (
+                data.map((teacher, index) => (
                   <tr
                     key={teacher.id}
                     className="transition-colors hover:bg-neutral-50"
@@ -192,13 +163,13 @@ const Teachers = () => {
                         className="text-lg"
                         style={{ color: colors.neutral[60] }}
                       >
-                        {teacher.email}
+                        {teacher.user.email}
                       </span>
                     </td>
 
                     <td className="px-6 py-2">
                       <div className="flex flex-wrap gap-2">
-                        {teacher.disciplines.map(discipline => (
+                        {teacher.subjects.map(discipline => (
                           <span
                             key={discipline.id}
                             className="rounded-full px-3 py-1 text-sm font-medium"
@@ -288,7 +259,7 @@ const Teachers = () => {
 
       <EditTeacherModal
         isOpen={editModalOpen}
-        teacher={selectedTeacher}
+        teacher={selectedTeacher || undefined}
         onCancel={() => {
           setEditModalOpen(false);
           setSelectedTeacher(null);

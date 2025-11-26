@@ -7,7 +7,7 @@ import DefaultModalBackdrop from '@/components/ui/DefaultModal/DefaultModalBackd
 import DefaultModalFooter from '@/components/ui/DefaultModal/DefaultModalFooter';
 import DefaultModalHeader from '@/components/ui/DefaultModal/DefaultModalHeader';
 import MultiSelectDropdown from '@/components/ui/MultiSelectDropdown/index';
-import { IDiscipline } from '@/interfaces/disciplines';
+import { ITeacher } from '@/interfaces/teachers';
 import { useDisciplines } from '@/services/api/disciplines';
 import { TeacherForm, TeacherSchema } from '@/validation/teacher.validation';
 
@@ -16,12 +16,7 @@ type EditTeacherModalProps = {
   onCancel: () => void;
   // eslint-disable-next-line no-unused-vars
   onConfirm: (data: TeacherForm) => void;
-  teacher: {
-    name: string;
-    phone: string;
-    email: string;
-    disciplines: IDiscipline[];
-  } | null;
+  teacher?: ITeacher;
 };
 
 const EditTeacherModal = ({
@@ -48,8 +43,8 @@ const EditTeacherModal = ({
       reset({
         name: teacher.name,
         phone: teacher.phone,
-        email: teacher.email,
-        disciplines: teacher.disciplines,
+        email: teacher.user.email,
+        disciplines: teacher.subjects,
       });
     }
   }, [isOpen, teacher, reset]);
