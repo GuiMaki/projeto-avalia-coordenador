@@ -34,7 +34,7 @@ export const useCreateTeacher = () => {
   const queryClient = useQueryClient();
 
   const createTeacher = async (form: CreateTeacherForm) => {
-    await http.post(BASE_URL, form);
+    await http.put(BASE_URL, form);
   };
 
   return useMutation({
@@ -49,8 +49,8 @@ export const useCreateTeacher = () => {
 
 export type EditTeacherForm = {
   name: string;
-  email: string;
   phone: string;
+  email: string;
   subjectIds: number[];
 };
 
@@ -86,7 +86,7 @@ export const useDeleteTeacher = () => {
     mutationFn: deleteTeacher,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.disciplines.all,
+        queryKey: queryKeys.teachers.all,
       });
     },
   });
