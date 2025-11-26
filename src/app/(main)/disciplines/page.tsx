@@ -7,6 +7,7 @@ import EditDisciplineModal from '@/components/pages/Home/EditDisciplineModal';
 import { Icon } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
+import { useDebounce } from '@/hooks/common';
 import { IDiscipline } from '@/interfaces/disciplines';
 import {
   useCreateDiscipline,
@@ -24,8 +25,9 @@ const Disciplines = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedDiscipline, setSelectedDiscipline] =
     useState<IDiscipline | null>(null);
+  const debouncedSearch = useDebounce(search);
   const { openModal, closeModal } = useDefaultModal();
-  const { data } = useDisciplines({ name: search });
+  const { data } = useDisciplines({ name: debouncedSearch });
   const { mutateAsync: createDiscipline } = useCreateDiscipline();
   const { mutateAsync: editDiscipline } = useEditDiscipline();
   const { mutateAsync: deleteDiscipline } = useDeleteDiscipline();
