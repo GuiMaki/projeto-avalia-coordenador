@@ -5,17 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 import { Icon } from '@/components/ui';
+import { IDiscipline } from '@/interfaces/disciplines';
 import colors from '@/theme/colors';
-
-type DropdownOption = {
-  label: string;
-  value: string | number;
-};
 
 type DropdownFormProps<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
-  options: DropdownOption[];
+  options: IDiscipline[];
   placeholder?: string;
 };
 
@@ -45,12 +41,12 @@ export const DropdownForm = <T extends FieldValues>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (option: DropdownOption) => {
-    onChange(option.value);
+  const handleSelect = (option: IDiscipline) => {
+    onChange(option.id);
     setIsOpen(false);
   };
 
-  const selectedOption = options.find(o => o.value === value);
+  const selectedOption = options.find(o => o.id === value);
 
   return (
     <div ref={dropdownRef} className="relative w-52">
@@ -59,7 +55,7 @@ export const DropdownForm = <T extends FieldValues>({
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
       >
-        <span>{selectedOption ? selectedOption.label : placeholder}</span>
+        <span>{selectedOption ? selectedOption.name : placeholder}</span>
 
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
@@ -73,11 +69,11 @@ export const DropdownForm = <T extends FieldValues>({
         <ul className="animate-slideDown absolute left-0 z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map(option => (
             <li
-              key={option.value}
+              key={option.id}
               className="cursor-pointer px-4 py-2 hover:bg-gray-100"
               onClick={() => handleSelect(option)}
             >
-              {option.label}
+              {option.name}
             </li>
           ))}
         </ul>

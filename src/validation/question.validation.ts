@@ -2,7 +2,7 @@ import z from './zod';
 
 export const QuestionSchema = z.object({
   title: z.string().min(1, 'Adicione uma questão'),
-  discipline: z.string().min(1, 'selecione uma disciplina'),
+  discipline: z.number(),
   answer1: z.object({
     label: z.string().min(1, 'Insira a resposta'),
     correct: z.boolean(),

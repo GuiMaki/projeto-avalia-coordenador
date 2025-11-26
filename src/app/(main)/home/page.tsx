@@ -1,5 +1,6 @@
 'use client';
 
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -11,12 +12,15 @@ import QuestionItem from '@/components/pages/Home/QuestionItem';
 import { Icon } from '@/components/ui';
 import NavBar from '@/components/ui/NavBar';
 import SearchBar from '@/components/ui/SearchBar';
+import { useDebounce } from '@/hooks/common';
+import { useCreateQuestion, useQuestions } from '@/services/api/questions';
 import colors from '@/theme/colors';
 import { QuestionForm } from '@/validation/question.validation';
 
 const Home = () => {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<FilterState>({
@@ -24,17 +28,55 @@ const Home = () => {
     teachers: [],
   });
 
-  console.log(activeFilters);
+  const { data } = useQuestions({
+    title: debouncedSearch,
+    disciplinaIds: activeFilters.disciplines,
+    professorIds: activeFilters.teachers,
+  });
+  const { mutateAsync: createQuestion } = useCreateQuestion();
 
-  const handleCreate = (data: QuestionForm) => {
-    console.log('Nova questão:', data);
+  const handleCreate = async (data: QuestionForm) => {
+    const correctAnswer = () => {
+      if (data.answer1.correct) {
+        return 'A';
+      }
+
+      if (data.answer2.correct) {
+        return 'B';
+      }
+
+      if (data.answer3.correct) {
+        return 'C';
+      }
+
+      if (data.answer4.correct) {
+        return 'D';
+      }
+
+      if (data.answer5.correct) {
+        return 'E';
+      }
+
+      return 'A';
+    };
+
+    const form = {
+      title: data.title,
+      answerA: data.answer1.label,
+      answerB: data.answer2.label,
+      answerC: data.answer3.label,
+      answerD: data.answer4.label,
+      answerE: data.answer5.label,
+      correctAnswer: correctAnswer(),
+      subjectId: data.discipline,
+    };
+
+    await createQuestion(form);
     setCreateModalOpen(false);
   };
 
   const handleApplyFilters = (filters: FilterState) => {
     setActiveFilters(filters);
-    console.log('Filtros aplicados:', filters);
-    // Aqui você aplicaria os filtros na listagem de questões
   };
 
   return (
@@ -95,17 +137,37 @@ const Home = () => {
           </div>
 
           <div className="flex flex-1 flex-col gap-4 p-5">
-            <QuestionItem
-              answer1={{ label: 'Willian', correct: true }}
-              answer2={{ label: 'Vini', correct: false }}
-              answer3={{ label: 'Doni', correct: false }}
-              answer4={{ label: 'Kenzo', correct: false }}
-              answer5={{ label: 'Maka', correct: false }}
-              date="25/12/2025"
-              discipline="Bagriçe"
-              questionText="Qual desses é bagre?"
-              teacher="Maka"
-            />
+            {data &&
+              data.map(item => (
+                <QuestionItem
+                  key={item.id}
+                  answer1={{
+                    label: item.answerA,
+                    correct: item.correctAnswer === 'A',
+                  }}
+                  answer2={{
+                    label: item.answerB,
+                    correct: item.correctAnswer === 'B',
+                  }}
+                  answer3={{
+                    label: item.answerC,
+                    correct: item.correctAnswer === 'C',
+                  }}
+                  answer4={{
+                    label: item.answerD,
+                    correct: item.correctAnswer === 'D',
+                  }}
+                  answer5={{
+                    label: item.answerE,
+                    correct: item.correctAnswer === 'E',
+                  }}
+                  date={format(item.updatedAt, 'dd/MM/yyyy')}
+                  discipline={item.subject.id}
+                  questionId={item.id}
+                  questionText={item.title}
+                  teacher={item.createdBy.username}
+                />
+              ))}
           </div>
         </div>
       </div>

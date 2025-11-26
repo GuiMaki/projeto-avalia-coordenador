@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { Icon } from '@/components/ui';
 import CheckBox from '@/components/ui/CheckBox';
+import { useDisciplines } from '@/services/api/disciplines';
+import { useTeachers } from '@/services/api/teachers';
 import colors from '@/theme/colors';
 
 type FilterSidebarProps = {
@@ -13,35 +15,22 @@ type FilterSidebarProps = {
 };
 
 export type FilterState = {
-  disciplines: string[];
-  teachers: string[];
+  disciplines: number[];
+  teachers: number[];
 };
-
-const disciplines = [
-  { label: 'Matemática', value: 'matematica' },
-  { label: 'Português', value: 'portugues' },
-  { label: 'História', value: 'historia' },
-  { label: 'Geografia', value: 'geografia' },
-  { label: 'Ciências', value: 'ciencias' },
-  { label: 'Inglês', value: 'ingles' },
-];
-
-const teachers = [
-  { label: 'Prof. João Silva', value: 'joao' },
-  { label: 'Prof. Maria Santos', value: 'maria' },
-  { label: 'Prof. Pedro Costa', value: 'pedro' },
-  { label: 'Prof. Ana Lima', value: 'ana' },
-];
 
 const FilterSidebar = ({
   isOpen,
   onClose,
   onApplyFilters,
 }: FilterSidebarProps) => {
-  const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
-  const [selectedTeachers, setSelectedTeachers] = useState<string[]>([]);
+  const [selectedDisciplines, setSelectedDisciplines] = useState<number[]>([]);
+  const [selectedTeachers, setSelectedTeachers] = useState<number[]>([]);
 
-  const handleDisciplineToggle = (value: string) => {
+  const { data: disciplineData } = useDisciplines({ name: '' });
+  const { data: teacherData } = useTeachers({ name: '' });
+
+  const handleDisciplineToggle = (value: number) => {
     setSelectedDisciplines(prev =>
       prev.includes(value)
         ? prev.filter(item => item !== value)
@@ -49,7 +38,7 @@ const FilterSidebar = ({
     );
   };
 
-  const handleTeacherToggle = (value: string) => {
+  const handleTeacherToggle = (value: number) => {
     setSelectedTeachers(prev =>
       prev.includes(value)
         ? prev.filter(item => item !== value)
@@ -124,14 +113,12 @@ const FilterSidebar = ({
                 </h3>
 
                 <div className="flex flex-col gap-2">
-                  {disciplines.map(discipline => (
+                  {disciplineData?.map(discipline => (
                     <CheckBox
-                      key={discipline.value}
-                      isSelected={selectedDisciplines.includes(
-                        discipline.value,
-                      )}
-                      label={discipline.label}
-                      onClick={() => handleDisciplineToggle(discipline.value)}
+                      key={discipline.id}
+                      isSelected={selectedDisciplines.includes(discipline.id)}
+                      label={discipline.name}
+                      onClick={() => handleDisciplineToggle(discipline.id)}
                     />
                   ))}
                 </div>
@@ -147,12 +134,12 @@ const FilterSidebar = ({
                 </h3>
 
                 <div className="flex flex-col gap-2">
-                  {teachers.map(teacher => (
+                  {teacherData?.map(teacher => (
                     <CheckBox
-                      key={teacher.value}
-                      isSelected={selectedTeachers.includes(teacher.value)}
-                      label={teacher.label}
-                      onClick={() => handleTeacherToggle(teacher.value)}
+                      key={teacher.id}
+                      isSelected={selectedTeachers.includes(teacher.id)}
+                      label={teacher.name}
+                      onClick={() => handleTeacherToggle(teacher.id)}
                     />
                   ))}
                 </div>

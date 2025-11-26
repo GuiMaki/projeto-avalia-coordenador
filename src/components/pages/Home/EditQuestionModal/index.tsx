@@ -8,19 +8,14 @@ import DefaultModalBackdrop from '@/components/ui/DefaultModal/DefaultModalBackd
 import DefaultModalFooter from '@/components/ui/DefaultModal/DefaultModalFooter';
 import DefaultModalHeader from '@/components/ui/DefaultModal/DefaultModalHeader';
 import { DropdownForm } from '@/components/ui/Dropdown';
+import { useDisciplines } from '@/services/api/disciplines';
 import { QuestionForm, QuestionSchema } from '@/validation/question.validation';
 
 import { Answer } from '../QuestionItem';
 
-const disciplines = [
-  { label: 'Matemática', value: 'matematica' },
-  { label: 'Português', value: 'portugues' },
-  { label: 'História', value: 'historia' },
-];
-
 type EditQuestionModalProps = {
   title: string;
-  discipline: string;
+  discipline: number;
   answer1: Answer;
   answer2: Answer;
   answer3: Answer;
@@ -44,12 +39,14 @@ const EditQuestionModal = ({
   answer4,
   answer5,
 }: EditQuestionModalProps) => {
+  const { data } = useDisciplines({ name: '' });
+
   const { control, handleSubmit, setValue, reset } = useForm<QuestionForm>({
     resolver: zodResolver(QuestionSchema),
     mode: 'onChange',
     defaultValues: {
       title: '',
-      discipline: '',
+      discipline: 0,
       answer1: { label: '', correct: false },
       answer2: { label: '', correct: false },
       answer3: { label: '', correct: false },
@@ -130,7 +127,7 @@ const EditQuestionModal = ({
           <DropdownForm
             control={control}
             name="discipline"
-            options={disciplines}
+            options={data || []}
             placeholder="Selecione uma disciplina"
           />
 

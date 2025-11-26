@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
 import { Icon } from '@/components/ui';
+import { useDeleteQuestion, useEditQuestion } from '@/services/api/questions';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { QuestionForm } from '@/validation/question.validation';
@@ -16,8 +17,9 @@ export type Answer = {
 };
 
 type QuestionItemProps = {
+  questionId: number;
   questionText: string;
-  discipline: string;
+  discipline: number;
   teacher?: string;
   answer1: Answer;
   answer2: Answer;
@@ -28,6 +30,7 @@ type QuestionItemProps = {
 };
 
 const QuestionItem = ({
+  questionId,
   discipline,
   questionText,
   teacher,
@@ -42,21 +45,60 @@ const QuestionItem = ({
   const { openModal, closeModal } = useDefaultModal();
   const [editModalOpen, setEditModalOpen] = useState(false);
 
+  const { mutateAsync: editQuestion } = useEditQuestion();
+  const { mutateAsync: deleteQuestion } = useDeleteQuestion();
+
   const handleDelete = () => {
     openModal({
       title: 'Excluir questão',
       message: 'Deseja excluir essa questão?',
       confirmText: 'Excluir',
-      onConfirm: () => console.log('Questão excluida'),
+      onConfirm: async () => {
+        await deleteQuestion(questionId);
+      },
       cancelText: 'Cancelar',
       onCancel: closeModal,
     });
   };
 
-  const onSubmit = (data: QuestionForm) => {
-    console.log('Dados editados:', data);
-    // Aqui você faria a chamada para atualizar a questão
-    // exemplo: updateQuestion(questionId, data);
+  const onSubmit = async (data: QuestionForm) => {
+    const correctAnswer = () => {
+      if (data.answer1.correct) {
+        return 'A';
+      }
+
+      if (data.answer2.correct) {
+        return 'B';
+      }
+
+      if (data.answer3.correct) {
+        return 'C';
+      }
+
+      if (data.answer4.correct) {
+        return 'D';
+      }
+
+      if (data.answer5.correct) {
+        return 'E';
+      }
+
+      return 'A';
+    };
+
+    const form = {
+      title: data.title,
+      answerA: data.answer1.label,
+      answerB: data.answer2.label,
+      answerC: data.answer3.label,
+      answerD: data.answer4.label,
+      answerE: data.answer5.label,
+      correctAnswer: correctAnswer(),
+      subjectId: data.discipline,
+    };
+
+    await editQuestion({ id: questionId, form });
+
     setEditModalOpen(false);
   };
 
