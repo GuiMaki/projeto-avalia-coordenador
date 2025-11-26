@@ -105,7 +105,7 @@ export const useEditTeacherPassword = () => {
     form: ChangePasswordForm;
   }) => {
     const { id, form } = variables;
-    await http.post(`${BASE_URL}/${id}/senha`, form);
+    await http.put(`${BASE_URL}/${id}/senha`, form);
   };
 
   return useMutation({
