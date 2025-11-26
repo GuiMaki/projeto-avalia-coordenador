@@ -150,7 +150,7 @@ const GenerateTest = () => {
                 control={control}
                 name="teacher"
                 options={teacherData || []}
-                placeholder="Selecione uma disciplina"
+                placeholder="Selecione um professor"
               />
 
               <Input

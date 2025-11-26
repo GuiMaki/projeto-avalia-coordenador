@@ -50,9 +50,9 @@ export const DropdownFormTeacher = <T extends FieldValues>({
   const selectedOption = options.find(o => o.id === value);
 
   return (
-    <div ref={dropdownRef} className="relative w-52">
+    <div ref={dropdownRef} className="relative w-full">
       <button
-        className="flex w-full flex-1 items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-gray-700 shadow-sm hover:border-gray-400 focus:outline-none"
+        className="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-gray-700 shadow-sm hover:border-gray-400 focus:outline-none"
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
       >
@@ -70,7 +70,7 @@ export const DropdownFormTeacher = <T extends FieldValues>({
         <ul className="animate-slideDown absolute left-0 z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map(option => (
             <li
-              key={option.user.id}
+              key={option.id}
               className="cursor-pointer px-4 py-2 hover:bg-gray-100"
               onClick={() => handleSelect(option)}
             >
