@@ -13,9 +13,9 @@ export const queryKeys = {
 
   teachers: {
     all: ['Teachers'] as const,
-    lists: () => [...queryKeys.disciplines.all, 'list'] as const,
+    lists: () => [...queryKeys.teachers.all, 'list'] as const,
     search: (params: { name: string }) =>
-      [...queryKeys.disciplines.all, 'search', params] as const,
+      [...queryKeys.teachers.all, 'search', params] as const,
   },
 } as const;
 
