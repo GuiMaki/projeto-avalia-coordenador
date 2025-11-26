@@ -117,15 +117,9 @@ const GenerateTest = () => {
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    const matchesDiscipline =
-      activeFilters.disciplines.length === 0 ||
-      activeFilters.disciplines.includes(question.discipline.toLowerCase());
+    const matchesDiscipline = activeFilters.disciplines.length === 0;
 
-    const matchesTeacher =
-      activeFilters.teachers.length === 0 ||
-      activeFilters.teachers.some(t =>
-        question.teacher.toLowerCase().includes(t),
-      );
+    const matchesTeacher = activeFilters.teachers.length === 0;
 
     return matchesSearch && matchesDiscipline && matchesTeacher;
   });
