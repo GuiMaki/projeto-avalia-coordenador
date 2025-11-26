@@ -45,21 +45,21 @@ const MultiSelectDropdown = <T extends FieldValues>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedValues = (value as number[]) || [];
+  // Agora selectedValues é um array de objetos {id, name}
+  const selectedValues = (value as IDiscipline[]) || [];
 
-  const handleToggle = (optionValue: number) => {
-    const newValues = selectedValues.includes(optionValue)
-      ? selectedValues.filter(v => v !== optionValue)
-      : [...selectedValues, optionValue];
+  const handleToggle = (option: IDiscipline) => {
+    const isSelected = selectedValues.some(v => v.id === option.id);
+    const newValues = isSelected
+      ? selectedValues.filter(v => v.id !== option.id)
+      : [...selectedValues, option];
     onChange(newValues);
   };
 
-  const selectedLabels = options
-    .filter(opt => selectedValues.includes(opt.id))
-    .map(opt => opt.name);
-
   const displayText =
-    selectedLabels.length > 0 ? selectedLabels.join(', ') : placeholder;
+    selectedValues.length > 0
+      ? selectedValues.map(v => v.name).join(', ')
+      : placeholder;
 
   return (
     <div className="w-full flex-col gap-2">
@@ -77,7 +77,7 @@ const MultiSelectDropdown = <T extends FieldValues>({
               ? colors.alert.error.primary
               : colors.neutral[40],
             color:
-              selectedLabels.length > 0
+              selectedValues.length > 0
                 ? colors.neutral[60]
                 : colors.neutral[40],
           }}
@@ -102,9 +102,9 @@ const MultiSelectDropdown = <T extends FieldValues>({
                 className="cursor-pointer px-4 py-2 hover:bg-gray-100"
               >
                 <CheckBox
-                  isSelected={selectedValues.includes(option.id)}
+                  isSelected={selectedValues.some(v => v.id === option.id)}
                   label={option.name}
-                  onClick={() => handleToggle(option.id)}
+                  onClick={() => handleToggle(option)}
                 />
               </li>
             ))}
