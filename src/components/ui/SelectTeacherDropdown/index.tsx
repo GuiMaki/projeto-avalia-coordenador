@@ -55,7 +55,7 @@ export const DropdownFormTeacher = <T extends FieldValues>({
     <div ref={dropdownRef} className="relative w-full flex-col">
       {/* LABEL IGUAL DO INPUT */}
       {label && (
-        <label className="mb-2 block text-xl text-[#454545]" htmlFor={name}>
+        <label className="my-2 block text-xl text-[#454545]" htmlFor={name}>
           {label}
         </label>
       )}
