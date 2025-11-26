@@ -25,7 +25,7 @@ export const useCreateDiscipline = () => {
   const queryClient = useQueryClient();
 
   const createDiscipline = async (params: { name: string }) => {
-    await http.post(BASE_URL, params);
+    await http.post(BASE_URL, null, { params });
   };
 
   return useMutation({
@@ -46,7 +46,7 @@ export const useEditDiscipline = () => {
     params: { name: string };
   }) => {
     const { id, params } = variables;
-    await http.put(`${BASE_URL}/${id}`, params);
+    await http.put(`${BASE_URL}/${id}`, null, { params });
   };
 
   return useMutation({
