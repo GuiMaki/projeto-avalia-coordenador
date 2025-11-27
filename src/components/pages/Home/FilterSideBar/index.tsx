@@ -75,7 +75,7 @@ const FilterSidebar = ({
           {/* Sidebar */}
           <motion.div
             animate={{ x: 0 }}
-            className="fixed right-0 top-0 z-50 h-full w-[400px] bg-white shadow-2xl"
+            className="fixed right-0 top-0 z-50 h-full w-[400px] bg-white shadow-2xl pb-10"
             exit={{ x: '100%' }}
             initial={{ x: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
