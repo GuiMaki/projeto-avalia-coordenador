@@ -148,7 +148,7 @@ const FilterSidebar = ({
 
             {/* Footer com botões */}
             <div
-              className="absolute bottom-0 left-0 right-0 flex gap-3 border-t p-5"
+              className="absolute bottom-0 left-0 right-0 flex gap-3 border-t p-5 bg-white"
               style={{ borderColor: colors.neutral[20] }}
             >
               <button
