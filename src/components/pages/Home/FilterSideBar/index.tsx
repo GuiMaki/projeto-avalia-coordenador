@@ -102,7 +102,7 @@ const FilterSidebar = ({
             </div>
 
             {/* Content */}
-            <div className="flex h-[calc(100%-140px)] flex-col gap-6 overflow-y-auto p-5">
+            <div className="flex h-[calc(100%-140px)] flex-col gap-6 overflow-y-auto p-5 mb-5">
               {/* Disciplinas */}
               <div>
                 <h3
@@ -127,7 +127,7 @@ const FilterSidebar = ({
               {/* Professores */}
               <div>
                 <h3
-                  className="mb-6 text-xl font-semibold"
+                  className="text-xl font-semibold"
                   style={{ color: colors.neutral[80] }}
                 >
                   Professores
