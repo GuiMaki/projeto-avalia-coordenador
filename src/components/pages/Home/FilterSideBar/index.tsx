@@ -127,7 +127,7 @@ const FilterSidebar = ({
               {/* Professores */}
               <div>
                 <h3
-                  className="mb-3 text-xl font-semibold"
+                  className="mb-6 text-xl font-semibold"
                   style={{ color: colors.neutral[80] }}
                 >
                   Professores
