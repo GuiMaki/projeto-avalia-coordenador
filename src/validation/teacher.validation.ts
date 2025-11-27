@@ -5,6 +5,7 @@ export const TeacherSchema = z
     name: z.string().min(1, 'Insira o nome do professor'),
     phone: z.string().min(1, 'Insira o telefone'),
     email: z.string().email('Email inválido').min(1, 'Insira o email'),
+
     disciplines: z
       .array(
         z.object({
@@ -13,11 +14,15 @@ export const TeacherSchema = z
         }),
       )
       .min(1, 'Selecione ao menos uma disciplina'),
+
     password: z
       .string()
       .min(6, 'A senha deve ter no mínimo 6 caracteres')
+      .regex(/[A-Za-z]/, 'A senha deve conter ao menos 1 letra')
+      .regex(/[0-9]/, 'A senha deve conter ao menos 1 número')
       .optional()
       .or(z.literal('')),
+
     confirmPassword: z.string().optional().or(z.literal('')),
   })
   .refine(
