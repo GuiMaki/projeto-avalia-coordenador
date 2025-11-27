@@ -63,7 +63,6 @@ const FilterSidebar = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop escurecido */}
           <motion.div
             animate={{ opacity: 1 }}
             className="fixed inset-0 z-40 bg-black/50"
