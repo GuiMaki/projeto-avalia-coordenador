@@ -26,6 +26,7 @@ const NavBar = ({ page }: NavBarProps) => {
       },
       cancelText: 'Fechar',
       onConfirm: () => {
+        closeModal();
         logout();
       },
       confirmText: 'Sair',
