@@ -27,6 +27,7 @@ const NavBar = ({ page }: NavBarProps) => {
       cancelText: 'Fechar',
       onConfirm: () => {
         logout();
+        router.replace('/login');
       },
       confirmText: 'Sair',
     });
