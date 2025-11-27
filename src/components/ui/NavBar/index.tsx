@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
+import { useAuth } from '@/contexts/authContext';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 
@@ -13,6 +14,7 @@ type NavBarProps = {
 
 const NavBar = ({ page }: NavBarProps) => {
   const router = useRouter();
+  const { logout } = useAuth();
   const { openModal, closeModal } = useDefaultModal();
 
   const handleExit = () => {
@@ -24,7 +26,7 @@ const NavBar = ({ page }: NavBarProps) => {
       },
       cancelText: 'Fechar',
       onConfirm: () => {
-        router.replace('/login');
+        logout();
       },
       confirmText: 'Sair',
     });
