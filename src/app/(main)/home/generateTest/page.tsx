@@ -17,6 +17,7 @@ import { DropdownFormTeacher } from '@/components/ui/SelectTeacherDropdown';
 import { useDebounce } from '@/hooks/common';
 import { useQuestions } from '@/services/api/questions';
 import { useTeachers } from '@/services/api/teachers';
+import { useCreateTest } from '@/services/api/test';
 import { useDefaultModal } from '@/store/defaultModalStore';
 import colors from '@/theme/colors';
 import { TestForm, TestSchema } from '@/validation/test.validation';
@@ -39,6 +40,7 @@ const GenerateTest = () => {
     professorIds: activeFilters.teachers,
   });
   const { data: teacherData } = useTeachers({ name: '' });
+  const { mutateAsync: createTest } = useCreateTest();
 
   const { control, handleSubmit, setValue } = useForm<TestForm>({
     resolver: zodResolver(TestSchema),
@@ -47,8 +49,8 @@ const GenerateTest = () => {
       date: '',
       teacher: 0,
       type: '',
-      time: '',
-      weight: '',
+      time: 0,
+      weight: 0.0,
       questions: [],
     },
   });
@@ -71,15 +73,48 @@ const GenerateTest = () => {
   };
 
   const onSubmit = (data: TestForm) => {
-    console.log('Dados da prova:', data);
-    console.log('Questões selecionadas:', selectedQuestions);
-    router.replace('/home');
+    const form = {
+      titulo: data.name,
+      idsQuestoes: data.questions,
+      dataProva: data.date,
+      professorResponsavelId: data.teacher,
+      tipoAvaliacao: data.type,
+      duracao: data.time,
+      peso: data.weight,
+    };
 
-    openModal({
-      title: 'Sucesso!',
-      message: 'Prova gerada com sucesso!',
-      confirmText: 'Fechar',
-      onConfirm: closeModal,
+    createTest(form, {
+      onSuccess: blob => {
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${data.name}.pdf`;
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        router.replace('/home');
+
+        openModal({
+          title: 'Sucesso!',
+          message: 'Prova gerada com sucesso!',
+          confirmText: 'Fechar',
+          onConfirm: closeModal,
+        });
+      },
+      onError: error => {
+        console.error('Erro ao gerar prova:', error);
+        openModal({
+          title: 'Erro!',
+          message: 'Falha ao gerar a prova. Tente novamente.',
+          confirmText: 'Fechar',
+          onConfirm: closeModal,
+        });
+      },
     });
   };
 
