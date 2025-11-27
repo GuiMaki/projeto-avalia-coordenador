@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 import { Icon } from '@/components/ui';
-import { IDiscipline } from '@/interfaces/disciplines';
 import { ITeacher } from '@/interfaces/teachers';
 import colors from '@/theme/colors';
 
@@ -44,12 +43,12 @@ export const DropdownFormTeacher = <T extends FieldValues>({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (option: IDiscipline) => {
-    onChange(option.id);
+  const handleSelect = (option: ITeacher) => {
+    onChange(option.user.id);
     setIsOpen(false);
   };
 
-  const selectedOption = options.find(o => o.id === value);
+  const selectedOption = options.find(o => o.user.id === value);
 
   return (
     <div ref={dropdownRef} className="relative w-full flex-col">

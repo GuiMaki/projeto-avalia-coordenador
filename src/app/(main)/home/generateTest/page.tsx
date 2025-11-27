@@ -76,12 +76,14 @@ const GenerateTest = () => {
     const form = {
       titulo: data.name,
       idsQuestoes: data.questions,
-      dataProva: data.date,
+      dataProva: `${data.date}T14:00:00`,
       professorResponsavelId: data.teacher,
       tipoAvaliacao: data.type,
       duracao: Number(data.time),
       peso: Number(data.weight),
     };
+
+    console.log(form.professorResponsavelId);
 
     createTest(form, {
       onSuccess: blob => {
