@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     sessionStorage.removeItem('accessToken');
 
     if (pathname !== '/login') {
-      redirect('/login');
+      router.replace('/login');
     }
   };
 
