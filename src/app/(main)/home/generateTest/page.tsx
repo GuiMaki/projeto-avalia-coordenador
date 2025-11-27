@@ -49,8 +49,8 @@ const GenerateTest = () => {
       date: '',
       teacher: 0,
       type: '',
-      time: 0,
-      weight: 0.0,
+      time: '',
+      weight: '',
       questions: [],
     },
   });
@@ -79,8 +79,8 @@ const GenerateTest = () => {
       dataProva: data.date,
       professorResponsavelId: data.teacher,
       tipoAvaliacao: data.type,
-      duracao: data.time,
-      peso: data.weight,
+      duracao: Number(data.time),
+      peso: Number(data.weight),
     };
 
     createTest(form, {

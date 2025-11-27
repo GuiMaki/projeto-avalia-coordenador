@@ -5,8 +5,8 @@ export const TestSchema = z.object({
   date: z.string().min(1, 'Insira uma data pra prova'),
   teacher: z.number(),
   type: z.string().min(1, 'Insira o tipo da avaliação'),
-  time: z.number().min(1, 'Insira a duração da prova'),
-  weight: z.number().min(1, 'Insira o peso da prova'),
+  time: z.string().min(1, 'Insira a duração da prova'),
+  weight: z.string().min(1, 'Insira o peso da prova'),
   questions: z.array(z.number()).min(1, 'Selecione ao menos uma questão'),
 });
 
