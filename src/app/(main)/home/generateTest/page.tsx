@@ -83,8 +83,6 @@ const GenerateTest = () => {
       peso: Number(data.weight),
     };
 
-    console.log(form.professorResponsavelId);
-
     createTest(form, {
       onSuccess: blob => {
         const url = window.URL.createObjectURL(blob);
